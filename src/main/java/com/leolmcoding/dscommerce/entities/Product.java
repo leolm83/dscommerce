@@ -3,6 +3,8 @@ package com.leolmcoding.dscommerce.entities;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 @Entity
 @Table(name = "tb_product")
@@ -24,6 +26,20 @@ public class Product {
     @OneToMany(mappedBy = "id.product")
     private Set<OrderItem> items = new HashSet<>();
     public Product (){}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
     public Product(Long id, String name, String description, Double price, String imgUrl) {
         this.id = id;
@@ -75,6 +91,9 @@ public class Product {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+    public List<Order> getOrders() {
+        return items.stream().map(OrderItem::getOrder).toList();
     }
 
 }
