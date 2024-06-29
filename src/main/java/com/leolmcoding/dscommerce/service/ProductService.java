@@ -4,6 +4,8 @@ import com.leolmcoding.dscommerce.dtos.ProductDTO;
 import com.leolmcoding.dscommerce.entities.Product;
 import com.leolmcoding.dscommerce.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,11 +35,11 @@ public class ProductService {
         );
         return Optional.of(productDTO);
     }
-    public Optional<List<ProductDTO>> findAll(){
-       List<Product> result = productRepository.findAll();
+    public Optional<Page<ProductDTO>> findAll(Pageable pageable){
+       Page<Product> result = productRepository.findAll(pageable);
         if(result.isEmpty()){
             return Optional.empty();
         }
-       return Optional.of(result.stream().map(ProductDTO::new).toList());
+       return Optional.of(result.map(ProductDTO::new));
     }
 }

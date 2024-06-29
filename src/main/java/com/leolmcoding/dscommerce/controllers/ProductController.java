@@ -5,6 +5,8 @@ import com.leolmcoding.dscommerce.entities.Product;
 import com.leolmcoding.dscommerce.repositories.ProductRepository;
 import com.leolmcoding.dscommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,10 +33,10 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(produto.get().getName());
     }
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> findAll(){
-        Optional<List<ProductDTO>> produto= productService.findAll();
+    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
+        Optional<Page<ProductDTO>> produto= productService.findAll(pageable);
         if(produto.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Page.empty());
         }
         return ResponseEntity.status(HttpStatus.OK).body(produto.get());
     }
